@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
+	"sync"
 )
 
 func main() {
@@ -21,16 +21,18 @@ func main() {
 	}
 
 	var ar []FileHash
+	var wg sync.WaitGroup
+
 	for idx, value := range entries {
-		//wg.Add(1)
+		wg.Add(1)
 		fh := NewFileHash()
 		value := value
-		go fh.CreateFileHash(value, dir, idx, &ar)
+		go fh.CreateFileHash(value, dir, idx, &ar, &wg)
 	}
 
-	time.Sleep(5 * time.Second)
+	wg.Wait()
 	for _, value := range ar {
 		value.printInfoFile()
 	}
-	//wg.Wait()
+
 }

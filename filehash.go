@@ -37,7 +37,8 @@ func ReadTextFileInfo(file *os.File) {
 	}
 }
 
-func (fh *FileHash) CreateFileHash(inp os.DirEntry, dir string, idx int, ar *[]FileHash) {
+func (fh *FileHash) CreateFileHash(inp os.DirEntry, dir string, idx int, ar *[]FileHash, wg *sync.WaitGroup) {
+	defer wg.Done()
 	file, err := inp.Info()
 	fmt.Println("[Goroutine %d] Starting to process entry %d", idx, idx)
 
